@@ -70,8 +70,7 @@ function chamaCallback(callable $callback): void
     $callback();
 }
 
-$callback = function()
-{
+$callback = function () {
     echo 'chamaCallback chamou essa função';
 };
 
@@ -80,3 +79,29 @@ echo PHP_EOL;
 
 // nulo (NULL) signica que a variável não tem valor.
 $semValor = NULL;
+
+// Na declaração de uma função podemos declarar o tipo dos parâmetros e do retorno.
+// Dependendo do tipo do retorno pode acontecer uma conversão de tipo.
+// No caso dessa função o retorno do função seria float, mas é convertido para int
+function calcula_imc(float $peso, float $altura): int
+{
+    var_dump($peso, $altura);
+    return $peso / ($altura * $altura);
+}
+
+var_dump(calcula_imc('75.1', 2));
+
+function registra_log($mensagem): void {
+    file_put_contents('/tmp/system.log', $mensagem. "\n", FILE_APPEND);
+}
+registra_log('teste');
+
+// Quando os parâmetros da função são tipados, é preciso passar o tipo exato.
+// O parâmetro pode ser do tipo bool, float, int, string, array, callable, self
+// e o nome de uma classe. Qualquer outra palavra vai causar uma exceção.
+function usar_tipo_errado(boolean $test)
+{
+    var_dump($test);
+}
+
+usar_tipo_errado(true);
