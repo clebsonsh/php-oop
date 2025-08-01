@@ -3,22 +3,24 @@
 class Produto
 {
     private $descricao;
+
     private $estoque;
+
     private $preco;
 
     // '__construct' é usado para definir o valor dos atributos de um objeto
     // no memento da sua criação. Tornando setters desnecesários.
     public function __construct($descricao, $estoque, $preco)
     {
-        if(is_string($descricao)) {
+        if (is_string($descricao)) {
             $this->descricao = $descricao;
         }
 
-        if(is_int($estoque) and $estoque > 0) {
+        if (is_int($estoque) and $estoque > 0) {
             $this->estoque = $estoque;
         }
 
-        if(is_numeric($preco) and $preco > 0) {
+        if (is_numeric($preco) and $preco > 0) {
             $this->preco = $preco;
         }
     }
@@ -39,7 +41,7 @@ class Produto
     }
 }
 
-$p1 = new Produto("Chocolate", 10, 5);
-print "Descrição: " . $p1->getDescricao() . PHP_EOL;
-print "Estoque: " . $p1->getEstoque() . PHP_EOL;
-print "Preço: " . $p1->getPreco() . PHP_EOL;
+$p1 = new Produto('Chocolate', 10, 5);
+echo 'Descrição: '.$p1->getDescricao().PHP_EOL;
+echo 'Estoque: '.$p1->getEstoque().PHP_EOL;
+echo 'Preço: '.$p1->getPreco().PHP_EOL;

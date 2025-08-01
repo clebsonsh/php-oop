@@ -3,7 +3,9 @@
 class Produto
 {
     private $descricao;
+
     private $estoque;
+
     private $preco;
 
     // Esse é um setter, é usado para definir o valor de um atributo de um objeto.
@@ -34,9 +36,9 @@ class Produto
     }
 }
 
-$p1 = new Produto();
-$p1->setDescricao("Cholocate");
+$p1 = new Produto;
+$p1->setDescricao('Cholocate');
 $p1->setEstoque(10);
 
-print "Descrição: " . $p1->getDescricao() . PHP_EOL;
-print "Estoque: " . $p1->getEstoque() . PHP_EOL;
+echo 'Descrição: '.$p1->getDescricao().PHP_EOL;
+echo 'Estoque: '.$p1->getEstoque().PHP_EOL;

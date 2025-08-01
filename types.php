@@ -1,7 +1,7 @@
 <?php
 
 // booleano pode ser TRUE ou FALSE
-$exibir_nome = TRUE; // declara variável com valor TRUE
+$exibir_nome = true; // declara variável com valor TRUE
 // testa se $exibir_nome é TRUE
 if ($exibir_nome) {
     echo 'José da Silva';
@@ -33,7 +33,7 @@ $variavel = 'Isto é um teste';
 $variavel = "Isto é um teste";
 
 // array é uma lista valores que podem ser de tipos variados
-$carros = array('Palio', 'Corsa', 'Gol');
+$carros = ['Palio', 'Corsa', 'Gol'];
 echo $carros[1]; // resultado = 'Corsa'
 echo PHP_EOL;
 
@@ -47,9 +47,9 @@ $carro->modelo = 'Palio';
 $carro->ano = 2002;
 $carro->cor = 'Azul';
 print_r($carro);
-echo $carro->modelo . ' ';
-echo $carro->ano . ' ';
-echo $carro->cor . ' ';
+echo $carro->modelo.' ';
+echo $carro->ano.' ';
+echo $carro->cor.' ';
 echo PHP_EOL;
 
 // misto (mixed) é usado para indicar que um parametro pode ser de tipos diversos
@@ -78,7 +78,7 @@ chamaCallback($callback);
 echo PHP_EOL;
 
 // nulo (NULL) signica que a variável não tem valor.
-$semValor = NULL;
+$semValor = null;
 
 // Na declaração de uma função podemos declarar o tipo dos parâmetros e do retorno.
 // Dependendo do tipo do retorno pode acontecer uma conversão de tipo.
@@ -86,13 +86,15 @@ $semValor = NULL;
 function calcula_imc(float $peso, float $altura): int
 {
     var_dump($peso, $altura);
+
     return $peso / ($altura * $altura);
 }
 
 var_dump(calcula_imc('75.1', 2));
 
-function registra_log($mensagem): void {
-    file_put_contents('/tmp/system.log', $mensagem. "\n", FILE_APPEND);
+function registra_log($mensagem): void
+{
+    file_put_contents('/tmp/system.log', $mensagem."\n", FILE_APPEND);
 }
 registra_log('teste');
 

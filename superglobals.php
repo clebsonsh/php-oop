@@ -1,4 +1,5 @@
 <?php
+
 // Superglobais são variáveis que estão disponíveis em qualquer escopo.
 
 // $_SERVER contém informações sobre o ambiente onde o script foi execultado, como
@@ -23,22 +24,23 @@ var_dump($_FILES);
 
 // Contém um array com as informações recebidas pelo script
 // que atualmente estão armazenadas nos cookies.
-setcookie("user_id", 1, time() + 3600);
+setcookie('user_id', 1, time() + 3600);
 var_dump($_COOKIE);
 
 // Contém um array com as variáveis da sessão do usuário.
 session_start();
-$_SESSION["user_name"] = "Ken Masters";
+$_SESSION['user_name'] = 'Ken Masters';
 var_dump($_SESSION);
 
 // Contém um array com as informações de $_GET, $_POST, e $_COOKIE
-setcookie("user_id", 1, time() + 3600);
+setcookie('user_id', 1, time() + 3600);
 var_dump($_REQUEST);
 
 // Contém um array com variáveis de ambiente. O PHP não faz o parse automático
 // de arquivos .env, para isso precisamos de bibliotecas como vlucas/phpdotenv
-$_ENV["DB_HOST"] = "localhost";
+$_ENV['DB_HOST'] = 'localhost';
 var_dump($_ENV);
 
 // Contém uma array com todas as variáveis globais disponíveis
 var_dump($GLOBALS);
+
