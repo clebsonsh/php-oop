@@ -1,6 +1,6 @@
 <?php
 
-class Account
+abstract class Account
 {
     protected float $balance;
 
@@ -31,4 +31,6 @@ class Account
             $this->balance += $amount;
         }
     }
+
+    abstract function withdraw(float $amount);
 }

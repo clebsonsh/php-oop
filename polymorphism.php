@@ -4,7 +4,7 @@ require_once 'classes/Account.php';
 require_once 'classes/SavingsAccount.php';
 require_once 'classes/CheckingAccount.php';
 
-/** @var array<int, CheckingAccount|SavingsAccount> */
+/** @var array<int, Account> */
 $accounts = [];
 $accounts[] = new CheckingAccount(6677, 'CC.1234.56', 100, 500);
 $accounts[] = new SavingsAccount(6678, 'PP.1234.57', 100);
