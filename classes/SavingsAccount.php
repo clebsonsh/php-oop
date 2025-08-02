@@ -1,6 +1,6 @@
 <?php
 
-class SavingsAccount extends Account
+final class SavingsAccount extends Account
 {
     public function withdraw(float $amount)
     {
