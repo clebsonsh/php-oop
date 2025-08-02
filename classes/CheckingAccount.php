@@ -12,7 +12,7 @@ class CheckingAccount extends Account
         parent::__construct($agency, $number, $balance);
     }
 
-    public function withdraw(float $amount)
+    public final function withdraw(float $amount)
     {
         if (($this->balance + $this->limit) < $amount) {
             return false;
