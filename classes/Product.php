@@ -1,6 +1,6 @@
 <?php
 
-class Product
+class Product implements Budgetable
 {
     private Maker $maker;
 
@@ -12,6 +12,11 @@ class Product
         private int $stock,
         private float $price,
     ) {}
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
 
     public function getDescription()
     {
