@@ -36,12 +36,12 @@
         $city_id = $row['city_id'];
         echo '<tr>';
         echo "<td align='center'>
-            <a href='person_form_edit.php?id={$id}'>
+            <a href='person_form.php?action=edit&id={$id}'>
                 <img src='images/edit.svg' style='width:17px'>
             </a>
         </td>";
         echo "<td align='center'>
-            <a href='person_delete.php?id={$id}'>
+            <a href='people_list.php?action=delete&id={$id}'>
                 <img src='images/remove.svg' style='width:17px'>
             </a>
         </td>";
@@ -57,7 +57,7 @@
     echo '</table>';
 
     ?>
-        <button onclick="window.location='person_form_create.php'">
+        <button onclick="window.location='person_form.php'">
             <img src='images/insert.svg' style='width:17px'> Add
         </button>
     </body>
