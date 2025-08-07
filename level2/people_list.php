@@ -10,6 +10,11 @@
     $dsn = 'host=localhost port=5432 dbname=book user=root password=password';
     $conn = pg_connect($dsn);
 
+    if (! empty($_GET['action']) and $_GET['action'] == 'delete') {
+        $id = (int) $_GET['id'];
+        pg_query($conn, "DELETE FROM people WHERE id='{$id}'");
+    }
+
     $result = pg_query($conn, 'SELECT * FROM people ORDER BY id');
 
     echo '<table border=1>';
