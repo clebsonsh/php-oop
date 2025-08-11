@@ -2,10 +2,28 @@
 
 class Person
 {
+    private static $conn;
+
+    public static function getConnection()
+    {
+        if (empty(self::$conn)) {
+            $dbConfig = parse_ini_file('config/db.ini');
+
+            $host = $dbConfig['host'];
+            $name = $dbConfig['name'];
+            $user = $dbConfig['user'];
+            $password = $dbConfig['password'];
+
+            self::$conn = new PDO("pgsql:host={$host};dbname={$name};user={$user};password={$password}");
+            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
+
+        return self::$conn;
+    }
+
     public static function all()
     {
-        $conn = new PDO('pgsql:dbname=book;user=root;password=password;host=localhost');
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = self::getConnection();
 
         $sql = <<< 'SQL'
             SELECT * FROM people ORDER BY id
@@ -18,22 +36,23 @@ class Person
 
     public static function find($id)
     {
-        $conn = new PDO('pgsql:dbname=book;user=root;password=password;host=localhost');
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = self::getConnection();
 
-        $sql = <<< SQL
-            SELECT * FROM people WHERE id='{$id}'
+        $sql = <<< 'SQL'
+            SELECT * FROM people WHERE id=:id
         SQL;
 
-        $result = $conn->query($sql);
+        $result = $conn->prepare($sql);
+        $result->execute([
+            ':id' => $id,
+        ]);
 
         return $result->fetch();
     }
 
     public static function save($person)
     {
-        $conn = new PDO('pgsql:dbname=book;user=root;password=password;host=localhost');
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = self::getConnection();
 
         if (empty($person['id'])) {
             $result = $conn->query(<<< 'SQL'
@@ -42,7 +61,7 @@ class Person
             $row = $result->fetch();
             $person['id'] = (int) $row['next'] + 1;
 
-            $sql = <<< SQL
+            $sql = <<< 'SQL'
                 INSERT INTO
                     people (
                         id,
@@ -55,48 +74,54 @@ class Person
                     )
                 VALUES
                     (
-                        '{$person['id']}',
-                        '{$person['name']}',
-                        '{$person['address']}',
-                        '{$person['neighborhood']}',
-                        '{$person['phone']}',
-                        '{$person['email']}',
-                        '{$person['city_id']}'
+                        :id,
+                        :name,
+                        :address,
+                        :neighborhood,
+                        :phone,
+                        :email,
+                        :city_id
                     )
-                RETURNING id
             SQL;
-
-            $result = $conn->query($sql);
-
-            return $result->fetch()['id'];
         } else {
-            $sql = <<< SQL
+            $sql = <<< 'SQL'
                 UPDATE people
-                SET name = '{$person['name']}',
-                    address = '{$person['address']}',
-                    neighborhood = '{$person['neighborhood']}',
-                    phone = '{$person['phone']}',
-                    email = '{$person['email']}',
-                    city_id = '{$person['city_id']}'
-                WHERE id = '{$person['id']}'
+                SET name = :name,
+                    address = :address,
+                    neighborhood = :neighborhood,
+                    phone = :phone,
+                    email = :email,
+                    city_id = :city_id
+                WHERE id = :id
             SQL;
-
-            $conn->query($sql);
-
-            return $person['id'];
         }
 
+        $result = $conn->prepare($sql);
+        $result->execute([
+            ':id' => $person['id'],
+            ':name' => $person['name'],
+            ':address' => $person['address'],
+            ':neighborhood' => $person['neighborhood'],
+            ':phone' => $person['phone'],
+            ':email' => $person['email'],
+            ':city_id' => $person['city_id'],
+        ]);
+
+        return $person['id'];
     }
 
     public static function delete($id)
     {
-        $conn = new PDO('pgsql:dbname=book;user=root;password=password;host=localhost');
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn = self::getConnection();
 
-        $sql = <<< SQL
-            DELETE FROM people WHERE id='{$id}'
+        $sql = <<< 'SQL'
+            DELETE FROM people WHERE id=:id
         SQL;
 
-        return $conn->query($sql);
+        $result = $conn->prepare($sql);
+
+        return $result->execute([
+            ':id' => $id,
+        ]);
     }
 }
