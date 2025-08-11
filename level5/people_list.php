@@ -1,13 +1,17 @@
 <?php
 
-require_once 'db/person_db.php';
+require_once 'classes/Person.php';
 
-if (! empty($_GET['action']) and $_GET['action'] == 'delete') {
-    $id = (int) $_GET['id'];
-    deletePerson($id);
+try {
+    if (! empty($_GET['action']) and $_GET['action'] == 'delete') {
+        $id = (int) $_GET['id'];
+        Person::delete($id);
+    }
+
+    $people = Person::all();
+} catch (Exception $e) {
+    echo $e->getMessage();
 }
-
-$people = listPeople();
 
 $items = '';
 foreach ($people as $person) {

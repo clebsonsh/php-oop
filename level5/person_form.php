@@ -1,23 +1,23 @@
 <?php
 
-require_once 'db/person_db.php';
+require_once 'classes/Person.php';
+require_once 'classes/City.php';
 
 if (! empty($_REQUEST['action'])) {
-    if ($_REQUEST['action'] == 'edit') {
-        $id = (int) $_GET['id'];
-        $person = getPerson($id);
+    try {
 
-    } elseif ($_REQUEST['action'] == 'save') {
-        $person = $_POST;
-        if (empty($_POST['id'])) {
-            $person['id'] = getNextPersonId();
-            $result = storePerson($person);
-        } else {
-            $result = updatePerson($person);
+        if ($_REQUEST['action'] == 'edit') {
+            $id = (int) $_GET['id'];
+            $person = Person::find($id);
+
+        } elseif ($_REQUEST['action'] == 'save') {
+            $person = $_POST;
+            $person['id'] = Person::save($person);
+            echo 'Record saved successfully';
+
         }
-
-        echo $result ? 'Record saved successfully' : pg_last_error($conn);
-
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
 } else {
     $person['id'] = null;
@@ -29,8 +29,6 @@ if (! empty($_REQUEST['action'])) {
     $person['city_id'] = null;
 }
 
-require_once 'city_combo_list.php';
-
 $form = file_get_contents('html/form.html');
 $form = str_replace('{id}', $person['id'], $form);
 $form = str_replace('{name}', $person['name'], $form);
@@ -39,6 +37,12 @@ $form = str_replace('{neighborhood}', $person['neighborhood'], $form);
 $form = str_replace('{phone}', $person['phone'], $form);
 $form = str_replace('{email}', $person['email'], $form);
 $form = str_replace('{city_id}', $person['city_id'], $form);
-$form = str_replace('{cities}', city_combo_list($person['city_id']), $form);
+
+$cities = '';
+foreach (City::all() as $city) {
+    $check = $city['id'] == $person['city_id'] ? 'selected' : '';
+    $cities .= "<option {$check} value='{$city['id']}'>{$city['name']}</option>\n";
+}
+$form = str_replace('{cities}', $cities, $form);
 
 echo $form;
