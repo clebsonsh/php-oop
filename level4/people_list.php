@@ -1,24 +1,23 @@
 <?php
 
-$dsn = 'host=localhost port=5432 dbname=book user=root password=password';
-$conn = pg_connect($dsn);
+require_once 'db/person_db.php';
 
 if (! empty($_GET['action']) and $_GET['action'] == 'delete') {
     $id = (int) $_GET['id'];
-    pg_query($conn, "DELETE FROM people WHERE id='{$id}'");
+    deletePerson($id);
 }
 
-$result = pg_query($conn, 'SELECT * FROM people ORDER BY id');
+$people = listPeople();
 
 $items = '';
-while ($row = pg_fetch_assoc($result)) {
+foreach ($people as $person) {
     $item = file_get_contents('html/item.html');
-    $item = str_replace('{id}', $row['id'], $item);
-    $item = str_replace('{name}', $row['name'], $item);
-    $item = str_replace('{address}', $row['address'], $item);
-    $item = str_replace('{neighborhood}', $row['neighborhood'], $item);
-    $item = str_replace('{phone}', $row['phone'], $item);
-    $item = str_replace('{email}', $row['email'], $item);
+    $item = str_replace('{id}', $person['id'], $item);
+    $item = str_replace('{name}', $person['name'], $item);
+    $item = str_replace('{address}', $person['address'], $item);
+    $item = str_replace('{neighborhood}', $person['neighborhood'], $item);
+    $item = str_replace('{phone}', $person['phone'], $item);
+    $item = str_replace('{email}', $person['email'], $item);
     $items .= $item;
 }
 

@@ -1,69 +1,22 @@
 <?php
 
-if (! empty($_REQUEST['action'])) {
-    $dsn = 'host=localhost port=5432 dbname=book user=root password=password';
-    $conn = pg_connect($dsn);
+require_once 'db/person_db.php';
 
+if (! empty($_REQUEST['action'])) {
     if ($_REQUEST['action'] == 'edit') {
         $id = (int) $_GET['id'];
-        $result = pg_query($conn, "SELECT * FROM people WHERE id='{$id}'");
-        $person = pg_fetch_assoc($result);
+        $person = getPerson($id);
 
     } elseif ($_REQUEST['action'] == 'save') {
         $person = $_POST;
         if (empty($_POST['id'])) {
-            $result = pg_query($conn, 'SELECT max(id) as next FROM people');
-            $next = (int) pg_fetch_assoc($result)['next'] + 1;
-
-            $query = <<< SQL
-                INSERT INTO
-                    people (
-                        id,
-                        name,
-                        address,
-                        neighborhood,
-                        phone,
-                        email,
-                        city_id
-                    )
-                VALUES
-                    (
-                        '{$next}',
-                        '{$person['name']}',
-                        '{$person['address']}',
-                        '{$person['neighborhood']}',
-                        '{$person['phone']}',
-                        '{$person['email']}',
-                        '{$person['city_id']}'
-                    )
-            SQL;
-
-            $result = pg_query($conn, $query);
-
-            $person['id'] = null;
-            $person['name'] = '';
-            $person['address'] = '';
-            $person['neighborhood'] = '';
-            $person['phone'] = '';
-            $person['email'] = '';
-            $person['city_id'] = null;
+            $person['id'] = getNextPersonId();
+            $result = storePerson($person);
         } else {
-            $query = <<< SQL
-                UPDATE people
-                SET name = '{$person['name']}',
-                    address = '{$person['address']}',
-                    neighborhood = '{$person['neighborhood']}',
-                    phone = '{$person['phone']}',
-                    email = '{$person['email']}',
-                    city_id = '{$person['city_id']}'
-                WHERE id = '{$person['id']}'
-            SQL;
-
-            $result = pg_query($conn, $query);
+            $result = updatePerson($person);
         }
 
         echo $result ? 'Record saved successfully' : pg_last_error($conn);
-        pg_close($conn);
 
     }
 } else {
